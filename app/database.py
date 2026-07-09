@@ -2,7 +2,7 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
-DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./data/todo.db")
+DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///C:/Users/FAHIM/sql_app.db")
 
 connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 engine = create_engine(DATABASE_URL, connect_args=connect_args)
@@ -12,5 +12,7 @@ Base = declarative_base()
 
 def get_db():
     db = SessionLocal()
-    yield db
-    db.close()
+    try:
+        yield db
+    finally:    
+        db.close() # must close 

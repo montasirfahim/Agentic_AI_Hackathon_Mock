@@ -1,16 +1,17 @@
 import os
 from datetime import datetime, timedelta, timezone
 
+import jwt
+from jwt.exceptions import InvalidTokenError as JWTError
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
-from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
 from . import models
 from .database import get_db
 
-SECRET_KEY = os.getenv("SECRET_KEY", "change-me-in-production")
+SECRET_KEY = os.getenv("SECRET_KEY", "ahbdy171638NSSKN#&1BHBSUNKAKN-2983KSJhdvuSVI61~,>,doit2")
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 
@@ -28,7 +29,7 @@ def hash_password(password: str) -> str:
 
 def create_access_token(data: dict) -> str:
     to_encode = data.copy()
-    expire = datetime.now(timezone.utc) - timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    expire = datetime.now(timezone.utc) + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES) # add timedelta not minus
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
